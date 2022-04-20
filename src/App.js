@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Datatable from "./Components/DataComp";
+import HeaderComp from "./Components/HeaderComp";
+import brew from './Components/brew.jpeg';
 
 function App() {
   const [data,setData] = useState([]);
@@ -9,6 +11,7 @@ function App() {
   //fetch the data from the texas breweries api
   useEffect(() => {
     fetch("https://api.openbrewerydb.org/breweries?by_state=texas")
+    //fetch("/backEnd") - would be used for up-to-date data
       .then((response) => response.json())
       .then((json) => setData(json)); 
   }, []);
@@ -59,6 +62,7 @@ function App() {
   const columns = data[0] && Object.keys(data[0]);
   return (
     <div>
+      <HeaderComp/>
       <div>
         Search:
         <input type = "text" value = {q} onChange={(e) => SetQ(e.target.value)} />
@@ -68,7 +72,7 @@ function App() {
               onChange = {() => {
                 const checked = searchColumns.includes(column)
                 setSearchColumns(prev => checked
-                  ? prev.filter(next => next !== column)
+                  ? prev.filter(sc => sc !== column)
                   : [...prev,column])
               }}/>
             {column}
@@ -78,6 +82,7 @@ function App() {
       <div>
         <Datatable data = {search(data)}/>
       </div> 
+      <img src = {brew} class = "center" style = {{width:'100%'}}/> 
     </div>
   );
 }
